@@ -37,7 +37,7 @@ unsigned long intervalShow = 500;
 unsigned long intervalHide = 300;
 
 // For keeping time:
-unsigned long previousMillis = 0;
+unsigned long previousMillis;
 
 // Modifier for increasing difficulty:
 unsigned int increaseDifficulty = 0;
@@ -55,6 +55,7 @@ void setup()
     pinMode(i, OUTPUT);
   }
   startNewGame();
+  
 }
 
 void loop()
@@ -74,6 +75,8 @@ void startNewGame()
   }
   // Some time for the player before the game begins
   delay(startDelay);
+  // Taking the first timestamp
+  previousMillis = millis();
 }
 
 void showLed()
