@@ -10,6 +10,6 @@ https://www.youtube.com/watch?v=8HIM7Pj1bpI -> 7:40
 Circuit:
 - 4x push-button
 - 4x LED
-- 4x 220 omh resistor
+- 4x 220 ohm resistor
 
 (Scorekeeping display is not implemented on this scetch)
