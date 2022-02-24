@@ -11,12 +11,12 @@
   all the elements are looped through.
 
   This scetch doesn't have a scorekeeping display implemented
-  
+
   The circuit:
   INPUTS:
-  * Pins 4-7: push-button, in input pullup-mode (you have to connect the button between input pin and groung)
+    Pins 4-7: push-button, in input pullup-mode (you have to connect the button between input pin and groung)
   OUTPUTS:
-  * Pins 8-11: LED in series with a 220 ohm resistor
+    Pins 8-11: LED in series with a 220 ohm resistor
 
   Created 18.2.2022
   By Valtti Rinnemaa
@@ -45,7 +45,7 @@ unsigned int increaseDifficulty = 0;
 byte sequence[sequenceLength];
 
 void setup()
-{ 
+{
   // Setting pins 4-7 to input pullup
   for (byte i = 4; i <= 7; i++) {
     pinMode(i, INPUT_PULLUP);
@@ -55,23 +55,22 @@ void setup()
     pinMode(i, OUTPUT);
   }
   startNewGame();
-  
 }
 
 void loop()
-{ 
+{
   showLed();
   hideLed();
   pollButtons();
-} 
+}
 
 void startNewGame()
-{ 
+{
   // Set the score to 0 and generate a sequence of random numbers ranging 1-4
   score = 0;
   randomSeed(analogRead(0));
   for (int i = 0; i < 1000; i++) {
-    sequence[i] = random(1, 5);  
+    sequence[i] = random(1, 5);
   }
   // Some time for the player before the game begins
   delay(startDelay);
@@ -80,25 +79,25 @@ void startNewGame()
 }
 
 void showLed()
-{ 
+{
   // This will keep up with the element of the sequence we are looping through
   static int sequenceElement = 0;
 
   // Once the time interval minus the modifier is reached, the LED will light up:
   if (millis() - previousMillis >= intervalShow - increaseDifficulty) {
     switch (sequence[sequenceElement]) {
-    case 1:
-      digitalWrite(8, HIGH);
-      break;
-    case 2:
-      digitalWrite(9, HIGH);
-      break;
-    case 3:
-      digitalWrite(10, HIGH);
-      break;
-    case 4:
-      digitalWrite(11, HIGH);
-      break;
+      case 1:
+        digitalWrite(8, HIGH);
+        break;
+      case 2:
+        digitalWrite(9, HIGH);
+        break;
+      case 3:
+        digitalWrite(10, HIGH);
+        break;
+      case 4:
+        digitalWrite(11, HIGH);
+        break;
     }
     // It then moves to next element in the sequence:
     sequenceElement++;
@@ -117,17 +116,17 @@ void showLed()
 }
 
 void hideLed()
-{ 
+{
   // Once the time interval minus the modifier is reached, the LEDs will dim
   if (millis() - previousMillis >= intervalHide - increaseDifficulty) {
     for (byte i = 8; i <= 11; i++) {
-    digitalWrite(i, LOW);
-    } 
+      digitalWrite(i, LOW);
+    }
   }
 }
 
 void gameover()
-{ 
+{
   // Endless loop of flashing LEDs
   // You have to give Arduino the reset to begin a new game
   for ( ; ; ) {
@@ -143,14 +142,14 @@ void gameover()
 }
 
 void pollButtons()
-{ 
+{
   // https://www.arduino.cc/en/Tutorial/BuiltInExamples/Debounce
   // All the button reading and debounce information is in arrays of 4
   // so they can be looped through, polling all the buttons one by one
   static byte reading[4];
   static byte buttonState[4]; // The current reading from the button pin
   static byte lastButtonState[4] = {HIGH, HIGH, HIGH, HIGH}; // The previous reading from the button pin
-  static unsigned long lastDebounceTime[4]; // the last time the button was noted as pressed 
+  static unsigned long lastDebounceTime[4]; // the last time the button was noted as pressed
 
   // This will keep up with the element of the sequence we are looping through
   static int sequenceElement = 0;
@@ -169,7 +168,7 @@ void pollButtons()
       // Reset the debouncing timer
       lastDebounceTime[i] = millis();
     }
-      
+
     if (millis() - lastDebounceTime[i] > debounceDelay) {
       // Whatever the reading is at, it's been there for longer than the debounce
       // delay, so take it as the actual current state:
@@ -185,7 +184,7 @@ void pollButtons()
           if (sequence[sequenceElement] + 3 == i) {
             score++;
             sequenceElement++;
-            
+
             // Once the end of the sequence is reached, it will loop back to [0]
             if (sequenceElement == sequenceLength) {
               sequenceElement = 0;
